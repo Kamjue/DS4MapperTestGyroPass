@@ -4,6 +4,10 @@ Mainly used as a test ground for trying out different mapping ideas. The applica
 support using a DualShock 4, DualSense, 8BitDo Ultimate 2 Wireless, Steam Controller, JoyCon,
 and Switch Pro.
 
+### Fork Differences
+
+Trying to add gyro passthrough to the project, I don't know much about how it works, this is just testing.
+
 ## Runtime Dependencies
 
 .NET 8 Desktop Runtime x64 - [https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.17-windows-x64-installer](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.17-windows-x64-installer)  
