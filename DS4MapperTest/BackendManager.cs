@@ -420,6 +420,22 @@ namespace DS4MapperTest
                     mapperDict.Remove(device.Index);
                 }
 
+                // If there is an un-synced mapper associated with this device, ensure
+                // any stored gyro passthrough frames are cleared before removing.
+                if (deviceMapperMap.TryGetValue(device, out Mapper unsyncedMapper))
+                {
+                    try
+                    {
+                        unsyncedMapper.ClearLastGyroFrame();
+                    }
+                    catch
+                    {
+                        // Ignore if mapper doesn't support clearing; best-effort cleanup.
+                    }
+
+                    deviceMapperMap.Remove(device);
+                }
+
                 //if (deviceMapperMap.ContainsKey(device))
                 //{
                 //    deviceMapperMap.Remove(device);

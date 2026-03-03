@@ -223,6 +223,10 @@ namespace DS4MapperTest
 
         private byte[] rawOutReportEx = new byte[63];
         private DS4_REPORT_EX outDS4Report;
+        // Last gyro frame received by mapper from any input reader/mapper.
+        // Set by concrete Mapper implementations when they process input.
+        protected GyroActions.GyroEventFrame lastGyroFrame;
+        protected bool hasLastGyroFrame = false;
 
         // TODO: Move elsewhere
         public enum OutputContType : ushort
@@ -1172,6 +1176,10 @@ namespace DS4MapperTest
                     outputController = null;
                     outputControlType = OutputContType.None;
                 }
+
+                // Clear any stored gyro passthrough frame when changing profile to avoid
+                // sending stale IMU data after profile changes.
+                hasLastGyroFrame = false;
 
                 // Check for current output controller and check for desired vibration
                 // status
@@ -2404,6 +2412,22 @@ namespace DS4MapperTest
                 //tempDS4.SetDPadDirection(tempDPad);
             }
 
+            // If possible, passthrough the last received gyro/accel frame into the
+            // extended DS4 output report so the virtual controller exposes IMU data.
+            if (outputControlType == OutputContType.DualShock4 && hasLastGyroFrame)
+            {
+                // Map gyro axes to DS4 report. Negate Pitch and Yaw to correct 
+                // inverted movement directions (Up -> Up, Left -> Left) so device 
+                // movement corresponds correctly in the virtual controller.
+                outDS4Report.wGyroX = (short)-lastGyroFrame.GyroPitch;
+                outDS4Report.wGyroY = (short)-lastGyroFrame.GyroYaw;
+                outDS4Report.wGyroZ = lastGyroFrame.GyroRoll;
+
+                outDS4Report.wAccelX = (short)-lastGyroFrame.AccelX;
+                outDS4Report.wAccelY = (short)-lastGyroFrame.AccelY;
+                outDS4Report.wAccelZ = lastGyroFrame.AccelZ;
+            }
+
             outDS4Report.bThumbLX = (byte)((intermediateState.LX >= 0 ? (DS4_STICK_MAX - DS4_STICK_MID) : -(DS4_STICK_MIN - DS4_STICK_MID)) * intermediateState.LX + DS4_STICK_MID);
             outDS4Report.bThumbLY = (byte)((intermediateState.LY >= 0 ? -(DS4_STICK_MIN - DS4_STICK_MID) : (DS4_STICK_MAX - DS4_STICK_MID)) * -intermediateState.LY + DS4_STICK_MID);
 
@@ -3067,6 +3091,19 @@ namespace DS4MapperTest
 
             outputController = null;
             outputControlType = OutputContType.None;
+
+            // Clear stored gyro passthrough frame when stopping mapper
+            hasLastGyroFrame = false;
+        }
+
+        /// <summary>
+        /// Clear any stored gyro/accel frame used for passthrough.
+        /// Public so external managers can ensure stale frames are not used
+        /// when mappers are removed while not fully started.
+        /// </summary>
+        public void ClearLastGyroFrame()
+        {
+            hasLastGyroFrame = false;
         }
     }
 }

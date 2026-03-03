@@ -498,6 +498,11 @@ namespace DS4MapperTest.DS4Library
                         elapsedReference = gyroSensDefinition.elapsedReference,
                     };
 
+                    // Store last gyro frame in base Mapper so passthrough can be
+                    // performed generically by Mapper implementations.
+                    this.lastGyroFrame = gyroFrame;
+                    this.hasLastGyroFrame = true;
+
                     gyroAct.Prepare(this, ref gyroFrame);
                     if (gyroAct.active)
                     {

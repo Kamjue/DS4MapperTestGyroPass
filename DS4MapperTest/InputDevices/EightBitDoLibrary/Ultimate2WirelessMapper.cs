@@ -406,6 +406,10 @@ namespace DS4MapperTest.InputDevices.EightBitDoLibrary
                         elapsedReference = gyroSensDefinition.elapsedReference,
                     };
 
+                    // Store last gyro frame in base Mapper so passthrough can be performed generically
+                    this.lastGyroFrame = gyroFrame;
+                    this.hasLastGyroFrame = true;
+
                     gyroAct.Prepare(this, ref gyroFrame);
                     if (gyroAct.active)
                     {
