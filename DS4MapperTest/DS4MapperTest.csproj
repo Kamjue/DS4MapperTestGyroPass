@@ -54,10 +54,11 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="HandyControl" Version="3.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NLog" Version="5.1.1" />
-    <PackageReference Include="WpfScreenHelper" Version="2.0.0" />
+    <PackageReference Include="HandyControl" Version="3.5.1" />
+    <PackageReference Include="Nefarius.ViGEm.Client" Version="1.21.256" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="NLog" Version="6.1.0" />
+    <PackageReference Include="WpfScreenHelper" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
