@@ -1,4 +1,4 @@
-# DS4MapperTest
+# DS4MapperTest Gyro Passthrough
 
 Mainly used as a test ground for trying out different mapping ideas. The application can currently
 support using a DualShock 4, DualSense, 8BitDo Ultimate 2 Wireless, Steam Controller, JoyCon,
@@ -6,7 +6,11 @@ and Switch Pro.
 
 ### Fork Differences
 
-Trying to add gyro passthrough to the project, I don't know much about how it works, this is just testing.
+Added basic gyro passthrough to the project, just testing.
+
+Currently only functional with 8BitDo Ultimate 2 Wireless on D-Input mode.
+
+Gyro always active when selected output controller is DS4.
 
 ## Runtime Dependencies
 
