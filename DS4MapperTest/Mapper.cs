@@ -2416,6 +2416,10 @@ namespace DS4MapperTest
             // extended DS4 output report so the virtual controller exposes IMU data.
             if (outputControlType == OutputContType.DualShock4 && hasLastGyroFrame)
             {
+                // Increment timestamp so games (like The Finals) 
+                // don't discard IMU data as stale.
+                outDS4Report.wTimestamp++;
+
                 // Map gyro axes to DS4 report. Negate Pitch and Yaw to correct 
                 // inverted movement directions (Up -> Up, Left -> Left) so device 
                 // movement corresponds correctly in the virtual controller.
