@@ -2416,20 +2416,23 @@ namespace DS4MapperTest
             // extended DS4 output report so the virtual controller exposes IMU data.
             if (outputControlType == OutputContType.DualShock4 && hasLastGyroFrame)
             {
-                // Increment timestamp so games (like The Finals) 
-                // don't discard IMU data as stale.
-                outDS4Report.wTimestamp++;
+                // Increment timestamp so games (like The Finals) don't discard IMU data as stale.
+                // Multiply by 3000/16 to convert from 16ms ticks to approximate 60Hz frequency (3000/16 = 187.5), alternative is ~200/16 = 12.5
+                outDS4Report.wTimestamp = (ushort)(((ulong)Environment.TickCount * 200 / 16) % ushort.MaxValue);
 
                 // Map gyro axes to DS4 report. Negate Pitch and Yaw to correct 
                 // inverted movement directions (Up -> Up, Left -> Left) so device 
                 // movement corresponds correctly in the virtual controller.
-                outDS4Report.wGyroX = (short)-lastGyroFrame.GyroPitch;
-                outDS4Report.wGyroY = (short)-lastGyroFrame.GyroYaw;
-                outDS4Report.wGyroZ = lastGyroFrame.GyroRoll;
+                outDS4Report.wGyroX = (short)(-lastGyroFrame.GyroPitch);
+                outDS4Report.wGyroY = (short)(-lastGyroFrame.GyroYaw);
+                outDS4Report.wGyroZ = (short)(-lastGyroFrame.GyroRoll);
 
-                outDS4Report.wAccelX = (short)-lastGyroFrame.AccelX;
-                outDS4Report.wAccelY = (short)-lastGyroFrame.AccelY;
-                outDS4Report.wAccelZ = lastGyroFrame.AccelZ;
+                outDS4Report.wAccelX = (short)(-lastGyroFrame.AccelX * 2);
+                outDS4Report.wAccelY = (short)(lastGyroFrame.AccelZ * 2);
+                outDS4Report.wAccelZ = (short)(-lastGyroFrame.AccelY * 2);
+
+                // Debug: Print IMU values to console
+                //Trace.WriteLine($"IMU Debug -> Gyro: X={outDS4Report.wGyroX} Y={outDS4Report.wGyroY} Z={outDS4Report.wGyroZ} | Accel: X={outDS4Report.wAccelX} Y={outDS4Report.wAccelY} Z={outDS4Report.wAccelZ}");
             }
 
             outDS4Report.bThumbLX = (byte)((intermediateState.LX >= 0 ? (DS4_STICK_MAX - DS4_STICK_MID) : -(DS4_STICK_MIN - DS4_STICK_MID)) * intermediateState.LX + DS4_STICK_MID);
