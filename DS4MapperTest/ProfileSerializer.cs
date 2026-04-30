@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -145,6 +145,12 @@ namespace DS4MapperTest
         {
             get => tempProfile.OutputGamepadSettings;
             set => tempProfile.OutputGamepadSettings = value;
+        }
+
+        public bool GyroPassthrough
+        {
+            get => tempProfile.GyroPassthrough;
+            set => tempProfile.GyroPassthrough = value;
         }
 
         private LightbarSettingsSerializer lightbarSerializer;

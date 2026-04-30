@@ -2420,7 +2420,7 @@ namespace DS4MapperTest
 
             // If possible, passthrough the last received gyro/accel frame into the
             // extended DS4 output report so the virtual controller exposes IMU data.
-            if (outputControlType == OutputContType.DualShock4 && hasLastGyroFrame)
+            if (outputControlType == OutputContType.DualShock4 && hasLastGyroFrame && actionProfile.GyroPassthrough)
             {
                 // Increment timestamp so games (like The Finals) don't discard IMU data as stale.
                 // Multiply by 3000/16 to convert from 16ms ticks to approximate 60Hz frequency (3000/16 = 187.5), alternative is ~200/16 = 12.5

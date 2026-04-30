@@ -1,4 +1,4 @@
-﻿<Window x:Class="DS4MapperTest.ProfileEditorTest"
+<Window x:Class="DS4MapperTest.ProfileEditorTest"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -243,35 +243,38 @@
                 </ListView>
             </TabItem>
             <TabItem Header="Gyros" Visibility="{Binding HasGyroBindings, Converter={StaticResource Boolean2VisibilityConverter}}">
-                <ListView ItemsSource="{Binding GyroBindings}" SelectedIndex="{Binding SelectGyroBindIndex}">
-                    <ListView.View>
-                        <GridView>
-                            <GridView.Columns>
-                                <GridViewColumn Header="Name" Width="100">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding DisplayInputMapString}" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Width="160">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding MappedActionType}" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Width="300">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Content="Edit" Click="GyroActionEdit_Button_Click" Tag="{Binding}" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView.Columns>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <DockPanel>
+                    <CheckBox Content="Gyro Passthrough" IsChecked="{Binding GyroPassthrough}" DockPanel.Dock="Top" Margin="8" />
+                    <ListView ItemsSource="{Binding GyroBindings}" SelectedIndex="{Binding SelectGyroBindIndex}">
+                        <ListView.View>
+                            <GridView>
+                                <GridView.Columns>
+                                    <GridViewColumn Header="Name" Width="100">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding DisplayInputMapString}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Width="160">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding MappedActionType}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Width="300">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="Edit" Click="GyroActionEdit_Button_Click" Tag="{Binding}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView.Columns>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </DockPanel>
             </TabItem>
             <TabItem Header="Meta">
                 <ListView ItemsSource="{Binding AlwaysOnBindings}" SelectedIndex="{Binding SelectAlwaysOnBindIndex}">

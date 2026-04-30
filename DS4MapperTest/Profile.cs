@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -124,6 +124,9 @@ namespace DS4MapperTest
                 currentActionSetIndex = index;
             }
         }
+
+        protected bool gyroPassthrough = true;
+        public bool GyroPassthrough { get => gyroPassthrough; set => gyroPassthrough = value; }
     }
 
     public class EmulatedControllerSettings

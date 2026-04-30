@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -291,6 +291,15 @@ namespace DS4MapperTest.ViewModels
             set
             {
                 tempProfile.OutputGamepadSettings.ForceFeedbackEnabled = value;
+            }
+        }
+        
+        public bool GyroPassthrough
+        {
+            get => tempProfile.GyroPassthrough;
+            set
+            {
+                tempProfile.GyroPassthrough = value;
             }
         }
 
