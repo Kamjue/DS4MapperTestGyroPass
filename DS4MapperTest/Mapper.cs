@@ -2407,6 +2407,12 @@ namespace DS4MapperTest
                 outDS4Report.bSpecial = (byte)(tempSpecial | (frameCounter << 2));
                 outDS4Report.wButtons |= tempDPad.Value;
 
+                if (baseDevice != null)
+                {
+                    outDS4Report.bBatteryLvl = (byte)(baseDevice.Battery / 10);
+                    outDS4Report.bBatteryLvlSpecial = (byte)(baseDevice.Battery / 10);
+                }
+
                 //tempDS4.SetButtonsFull(tempButtons);
                 //tempDS4.SetSpecialButtonsFull((byte)tempSpecial);
                 //tempDS4.SetDPadDirection(tempDPad);
