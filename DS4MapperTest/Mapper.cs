@@ -2423,9 +2423,9 @@ namespace DS4MapperTest
                 // Map gyro axes to DS4 report. Negate Pitch and Yaw to correct 
                 // inverted movement directions (Up -> Up, Left -> Left) so device 
                 // movement corresponds correctly in the virtual controller.
-                outDS4Report.wGyroX = (short)(-lastGyroFrame.GyroPitch);
-                outDS4Report.wGyroY = (short)(-lastGyroFrame.GyroYaw);
-                outDS4Report.wGyroZ = (short)(-lastGyroFrame.GyroRoll);
+                outDS4Report.wGyroX = (short)(-lastGyroFrame.GyroPitch * (16.384f / 17.4f));
+                outDS4Report.wGyroY = (short)(-lastGyroFrame.GyroYaw * (16.384f / 17.4f));
+                outDS4Report.wGyroZ = (short)(-lastGyroFrame.GyroRoll * (16.384f / 17.4f));
 
                 outDS4Report.wAccelX = (short)(-lastGyroFrame.AccelX * 2);
                 outDS4Report.wAccelY = (short)(lastGyroFrame.AccelZ * 2);
