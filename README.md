@@ -2,7 +2,7 @@
 
 Mainly used as a test ground for trying out different mapping ideas. The application can currently
 support using a DualShock 4, DualSense, 8BitDo Ultimate 2 Wireless, Steam Controller 2015,
-Steam Controller 2026 (upcoming), JoyCon, and Switch Pro.
+Steam Controller 2026, JoyCon, and Switch Pro.
 
 ### Fork Differences
 
@@ -25,7 +25,7 @@ HidHide - [https://vigem.org/projects/HidHide/](https://vigem.org/projects/HidHi
 
 ## Current Beta
 
-https://github.com/Ryochan7/DS4MapperTest/releases/tag/v0.0.27
+https://github.com/Ryochan7/DS4MapperTest/releases/tag/v0.0.28
 
 ## Screenshots
 

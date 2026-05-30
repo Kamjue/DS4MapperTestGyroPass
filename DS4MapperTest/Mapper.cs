@@ -2575,8 +2575,8 @@ namespace DS4MapperTest
 
             if (mouseWheelSync)
             {
-                eventInputHandler.PerformMouseWheelEvent(vertical: mouseWheelY,
-                    horizontal: mouseWheelX);
+                eventInputHandler.PerformMouseWheelEvent(vertical: mouseWheelY * eventInputMapping.WHEEL_TICK_BASE,
+                    horizontal: mouseWheelX * eventInputMapping.WHEEL_TICK_BASE);
                 mouseWheelSync = false;
             }
 
@@ -2857,6 +2857,10 @@ namespace DS4MapperTest
                     intermediateState.BtnThumbR = pressed;
                     intermediateState.Dirty = true;
                     break;
+                case JoypadActionCodes.CenterPadClick:
+                    intermediateState.BtnTouchClick = pressed;
+                    intermediateState.Dirty = true;
+                    break;
 
                 default:
                     break;
@@ -2954,6 +2958,10 @@ namespace DS4MapperTest
                     break;
                 case JoypadActionCodes.BtnThumbR:
                     intermediateState.BtnThumbR = active;
+                    intermediateState.Dirty = true;
+                    break;
+                case JoypadActionCodes.CenterPadClick:
+                    intermediateState.BtnTouchClick = active;
                     intermediateState.Dirty = true;
                     break;
                 default:

@@ -25,6 +25,7 @@ namespace DS4MapperTest
         public const string PROFILES_FOLDER_NAME = "Profiles";
         public const string LOGS_FOLDER_NAME = "Logs";
         public const string STEAM_CONTROLLER_PROFILE_DIR = "SteamController";
+        public const string STEAM_CONTROLLER_TRITON_PROFILE_DIR = "SteamControllerTriton";
         public const string DS4_PROFILE_DIR = "DualShock4";
         public const string DUALSENSE_PROFILE_DIR = "DualSense";
         public const string SWITCH_PRO_PROFILE_DIR = "SwitchPro";
@@ -87,6 +88,7 @@ namespace DS4MapperTest
         private List<string> checkFoldersList = new List<string>()
             {
                 STEAM_CONTROLLER_PROFILE_DIR,
+                STEAM_CONTROLLER_TRITON_PROFILE_DIR,
                 DS4_PROFILE_DIR,
                 DUALSENSE_PROFILE_DIR,
                 SWITCH_PRO_PROFILE_DIR,
@@ -546,58 +548,62 @@ namespace DS4MapperTest
                             tempRootJObj = JObject.Parse(newJson);
                         }
 
-                        if (token != null)
+                        // Check there is a serial for a device before proceeding
+                        if (!string.IsNullOrEmpty(testDev.Serial))
                         {
-                            // Found existing item. Update properties and replace object
-                            JObject controllerObj = token.ToObject<JObject>();
-                            string macAddr = testDev.Serial;
-                            //string devType = InputDeviceType.SteamController.ToString();
-                            string devType = testDev.DeviceType.ToString();
-
-                            controllerObj["Mac"] = macAddr;
-                            controllerObj["Type"] = devType;
-                            if (testDev.PrimaryDevice &&
-                                activeProfiles.TryGetValue(testDev.Index, out string currentProfile) &&
-                                !string.IsNullOrEmpty(currentProfile))
+                            if (token != null)
                             {
-                                controllerObj["LastProfile"] = Path.GetFileNameWithoutExtension(currentProfile);
-                            }
+                                // Found existing item. Update properties and replace object
+                                JObject controllerObj = token.ToObject<JObject>();
+                                string macAddr = testDev.Serial;
+                                //string devType = InputDeviceType.SteamController.ToString();
+                                string devType = testDev.DeviceType.ToString();
 
-                            store.PersistSettings(controllerObj);
-                            token.Replace(controllerObj);
-                        }
-                        else
-                        {
-                            JToken controllersToken = tempRootJObj.SelectToken("Controllers");
-                            if (controllersToken == null)
+                                controllerObj["Mac"] = macAddr;
+                                controllerObj["Type"] = devType;
+                                if (testDev.PrimaryDevice &&
+                                    activeProfiles.TryGetValue(testDev.Index, out string currentProfile) &&
+                                    !string.IsNullOrEmpty(currentProfile))
+                                {
+                                    controllerObj["LastProfile"] = Path.GetFileNameWithoutExtension(currentProfile);
+                                }
+
+                                store.PersistSettings(controllerObj);
+                                token.Replace(controllerObj);
+                            }
+                            else
                             {
-                                tempRootJObj.Add(new JProperty("Controllers", new JArray()));
+                                JToken controllersToken = tempRootJObj.SelectToken("Controllers");
+                                if (controllersToken == null)
+                                {
+                                    tempRootJObj.Add(new JProperty("Controllers", new JArray()));
+                                }
+                                else if (controllersToken != null && controllersToken.Type != JTokenType.Array)
+                                {
+                                    tempRootJObj.Remove("Controllers");
+                                    tempRootJObj.Add(new JProperty("Controllers", new JArray()));
+                                }
+
+                                // No current object found. Create a new object and add it to JArray
+                                string controllerJson = @"{
+                                    ""Mac"": """",
+                                    ""Type"": """"
+                                }";
+
+                                JObject controllerObj = JObject.Parse(controllerJson);
+                                //JObject controllerObj = new JObject();
+                                string macAddr = testDev.Serial;
+                                //string devType = InputDeviceType.SteamController.ToString();
+                                string devType = testDev.DeviceType.ToString();
+                                controllerObj["Mac"] = testDev.Serial;
+                                controllerObj["Type"] = devType;
+
+                                store.PersistSettings(controllerObj);
+
+                                JArray controllersJArray = tempRootJObj["Controllers"].ToObject<JArray>();
+                                controllersJArray.Add(controllerObj);
+                                tempRootJObj["Controllers"].Replace(controllersJArray);
                             }
-                            else if (controllersToken != null && controllersToken.Type != JTokenType.Array)
-                            {
-                                tempRootJObj.Remove("Controllers");
-                                tempRootJObj.Add(new JProperty("Controllers", new JArray()));
-                            }
-
-                            // No current object found. Create a new object and add it to JArray
-                            string controllerJson = @"{
-                                ""Mac"": """",
-                                ""Type"": """"
-                            }";
-
-                            JObject controllerObj = JObject.Parse(controllerJson);
-                            //JObject controllerObj = new JObject();
-                            string macAddr = testDev.Serial;
-                            //string devType = InputDeviceType.SteamController.ToString();
-                            string devType = testDev.DeviceType.ToString();
-                            controllerObj["Mac"] = testDev.Serial;
-                            controllerObj["Type"] = devType;
-
-                            store.PersistSettings(controllerObj);
-
-                            JArray controllersJArray = tempRootJObj["Controllers"].ToObject<JArray>();
-                            controllersJArray.Add(controllerObj);
-                            tempRootJObj["Controllers"].Replace(controllersJArray);
                         }
                     }
                     catch (JsonReaderException)
@@ -684,6 +690,9 @@ namespace DS4MapperTest
             {
                 case InputDeviceType.SteamController:
                     result = Path.Combine(baseProfilesPath, STEAM_CONTROLLER_PROFILE_DIR);
+                    break;
+                case InputDeviceType.SteamControllerTriton:
+                    result = Path.Combine(baseProfilesPath, STEAM_CONTROLLER_TRITON_PROFILE_DIR);
                     break;
                 case InputDeviceType.DS4:
                     result = Path.Combine(baseProfilesPath, DS4_PROFILE_DIR);
@@ -819,6 +828,7 @@ namespace DS4MapperTest
     {
         None,
         SteamController,
+        SteamControllerTriton,
         SwitchPro,
         DS4,
         DualSense,
